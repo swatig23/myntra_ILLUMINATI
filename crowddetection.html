@@ -1,0 +1,156 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Crowd Detection</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#team-illuminati---crowd-detection-and-people-counter">Team ILLUMINATI - Crowd Detection and People Counter</a></li>
+<li><a href="#features">Features!</a></li>
+<li><a href="#tech">Tech</a></li>
+<li><a href="#how-does-it-work">How Does it Work?</a>
+<ul>
+<li><a href="#introduction">Introduction</a></li>
+<li><a href="#deeper-dive">Deeper Dive</a></li>
+<li><a href="#what-tech-is-used-where">What Tech is Used Where?</a></li>
+</ul>
+</li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#working">Working</a>
+<ul>
+<li><a href="#api-mode---for-all-you-devs-out-there">API Mode - For all you devs out there</a></li>
+</ul>
+</li>
+<li><a href="#thats-it-">That’s it !</a></li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="team-illuminati---crowd-detection-and-people-counter">Team ILLUMINATI - Crowd Detection and People Counter</h1>
+<p><a href="https://travis-ci.org/joemccann/dillinger"><img src="https://travis-ci.org/joemccann/dillinger.svg?branch=master" alt="Build Status"></a></p>
+<p>For our complete submisisson, headover to - <a href="https://github.com/swatig23/myntra_ILLUMINATI">Illuminati</a><br>
+This is the first component of our project - <a href="https://github.com/Prabhav55221/ILLUIMINATI-Crowd-Detection"><strong>Crowd Detection and People Counter</strong></a></p>
+<p>Before going further please see the demo - <strong><strong>Insert Video</strong></strong></p>
+<h1 id="features">Features!</h1>
+<ul>
+<li>Easy 5 step setup on your local PC.</li>
+<li>Interactive Command Line API for fast usage.</li>
+<li>Advanced Centroid Tracking Algorithm to identify people and track them.</li>
+<li>34 FPS. Can run at 60 FPS if RAM allows.</li>
+</ul>
+<p>You can also:</p>
+<ul>
+<li>Use this as an API!</li>
+<li>Use your webcam and/or an external camera for mask detection using our Command Line Arguements.</li>
+</ul>
+<h1 id="tech">Tech</h1>
+<p>Our CDPC uses a number of open source projects and libraries to work properly:</p>
+<ul>
+<li>Tensorflow - For training our DL Model.</li>
+<li>Keras - For helping us evaluate our DL Model</li>
+<li>Open CV - For Face Recognition and all our computer vision needs.</li>
+<li>Caffe - A deep learning framework made with expression, speed, and modularity in mind. Used for Detecting and tracking people.</li>
+<li>Mobile Net SSD - Pretrained DL Model</li>
+</ul>
+<h1 id="how-does-it-work">How Does it Work?</h1>
+<h2 id="introduction">Introduction</h2>
+<ul>
+<li>
+<p><strong>Phase 1 — Detecting:</strong>  During the detection phase we are running our computationally more expensive object tracker to</p>
+<ul>
+<li>(1) detect if new objects have entered our view, and</li>
+<li>(2) see if we can find objects that were “lost” during the tracking phase.</li>
+<li>For each detected object we create or update an object tracker with the new bounding box coordinates.</li>
+<li>Since our object detector is more computationally expensive we only run this phase once every  <em>34</em>  frames.</li>
+</ul>
+</li>
+<li>
+<p><strong>Phase 2 — Tracking:</strong>  When we are not in the “detecting” phase we are in the “tracking” phase.</p>
+<ul>
+<li>For each of our detected objects, we create an object tracker to track the object as it moves around the frame.</li>
+<li>Our object tracker should be faster and more efficient than the object detector.</li>
+<li>We’ll continue tracking until we’ve reached the  <em>34</em>-th frame and then re-run our object detector. The entire process then repeats.</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://s3-us-west-2.amazonaws.com/static.pyimagesearch.com/people-counting/opencv_people_counter_result01.gif" alt=""></p>
+<h2 id="deeper-dive">Deeper Dive</h2>
+<p>At <strong>Step #1</strong> we accept a set of bounding boxes and compute their corresponding centroids (i.e., the center of the bounding boxes). We do this using <strong>dlib</strong>.</p>
+<p>During <strong>Step #2</strong> we compute the <strong>Euclidean distance</strong> between any <em>new</em> centroids (yellow) and <em>existing</em> centroids (purple).<br>
+The centroid tracking algorithm makes the assumption that pairs of centroids with minimum Euclidean distance between them  <em>must be the same object ID</em>.<br>
+In the example image below we have two existing centroids (<em>purple</em>) and three new centroids (<em>yellow</em>), implying that a new object has been detected (since there is one more new centroid vs. old centroid).<br>
+The arrows then represent computing the Euclidean distances between all purple centroids and all yellow centroids.</p>
+<p>Once we have the Euclidean distances we attempt to associate object IDs in  <strong>Step #3</strong>.</p>
+<p>We register the object in <strong>Step #5</strong>.</p>
+<p>These steps are shown in the below visualisation.</p>
+<p><img src="https://s3-us-west-2.amazonaws.com/static.pyimagesearch.com/people-counting/opencv_people_counter_centroid_tracking.gif" alt=""></p>
+<h2 id="what-tech-is-used-where">What Tech is Used Where?</h2>
+<p>The main components used are:</p>
+<ul>
+<li>From the utilities module, we import our custom CentroidTracker and TrackableObject classes.</li>
+<li>The VideoStream and FPS modules from imutils.video will help us to work with a webcam and to calculate the estimated Frames Per Second (FPS) throughput rate.</li>
+<li>We need imutils for its OpenCV convenience functions.</li>
+<li>The dlib library will be used for its correlation tracker implementation.</li>
+<li>OpenCV will be used for deep neural network inference, opening video files, writing video files, and displaying output frames to our screen.</li>
+</ul>
+<p>Below is an example of dblib correlation tracker in use:</p>
+<p><img src="https://i.ytimg.com/vi/tMuX5TP6uqA/maxresdefault.jpg" alt="Multiple object tracking with dlib correlation tracker and sort - YouTube"></p>
+<h1 id="installation">Installation</h1>
+<p>We have tried to keep the installation process as simple as possible. Please keep note of the following points:</p>
+<ul>
+<li>Please follow the exact steps.The App is tested and verified only if each step is followed.</li>
+<li>First time deployment of app might take 1 -2 minutes.</li>
+<li>Note that all commands are to be entered with Admin Permissions in the command line.</li>
+</ul>
+<p>Step 1 - Clone the Repository.</p>
+<pre class=" language-sh"><code class="prism  language-sh">$ git clone https://github.com/Prabhav55221/ILLUIMINATI-Crowd-Detection.git
+$ cd ILLUMINATI-Crowd-Detection
+</code></pre>
+<p>Step 2 - Create Virtual Env and Download Reqs.</p>
+<pre class=" language-sh"><code class="prism  language-sh">$ mkvirtualenv tester
+$ pip3 install -r requirements.txt
+OR
+$ mkvirtualenv tester
+$ pip install -r requirements.txt
+</code></pre>
+<p>And that’s it! You are done. Let’s now get this working.</p>
+<h1 id="working">Working</h1>
+<h2 id="api-mode---for-all-you-devs-out-there">API Mode - For all you devs out there</h2>
+<p>Step 1: CD into the folder<br>
+Step 2: Now you can use both <strong>VIDEO</strong> and <strong>WEBCAM MODE</strong> by entering the following code.</p>
+<blockquote>
+<p><strong>Video Mode</strong> (Pass any video path as input)<br>
+Once you run the below code, the APP will ask for a choice. Choose 1 for video<br>
+Incase you face any issues passing local path, add the video to /videos folder and pass in videos/name.mp4</p>
+</blockquote>
+<pre class=" language-sh"><code class="prism  language-sh">$ python3 app.py
+OR
+$ python app.py
+</code></pre>
+<blockquote>
+<p><strong>Webcam Mode</strong><br>
+Once you run the below code, the APP will ask for a choice. Choose 2 for webacam.</p>
+</blockquote>
+<pre class=" language-sh"><code class="prism  language-sh">$ python3 app.py
+OR
+$ python3 app.py
+</code></pre>
+<h1 id="thats-it-">That’s it !</h1>
+<p>Team Illuminati<br>
+NSUT, Delhi</p>
+
+    </div>
+  </div>
+</body>
+
+</html>

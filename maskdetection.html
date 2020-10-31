@@ -1,0 +1,175 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mask Detection</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#team-illuminati---mask-detection">Team ILLUMINATI - Mask Detection</a></li>
+<li><a href="#features">Features!</a></li>
+<li><a href="#tech">Tech</a></li>
+<li><a href="#how-does-it-work">How Does it Work?</a>
+<ul>
+<li><a href="#dataset">Dataset</a></li>
+<li><a href="#training">Training</a></li>
+<li><a href="#computer-vision">Computer Vision</a></li>
+</ul>
+</li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a>
+<ul>
+<li><a href="#web-application-mode">Web Application Mode</a></li>
+<li><a href="#api-mode---for-all-you-devs-out-there">API Mode - For all you devs out there</a></li>
+</ul>
+</li>
+<li><a href="#thats-it-">That’s it !</a></li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="team-illuminati---mask-detection">Team ILLUMINATI - Mask Detection</h1>
+<p><a href="https://travis-ci.org/joemccann/dillinger"><img src="https://travis-ci.org/joemccann/dillinger.svg?branch=master" alt="Build Status"></a></p>
+<p>For our complete submisisson, headover to - <a href="https://github.com/swatig23/myntra_ILLUMINATI">Illuminati</a><br>
+This is the first component of our project - <a href="https://github.com/Prabhav55221/ILLUMINATI-MaskDetection"><strong>Real Time Mask Detection</strong></a></p>
+<p>Before going further please see the demo - <strong><strong>Insert Video</strong></strong></p>
+<h1 id="features">Features!</h1>
+<ul>
+<li>Easy 5 step setup on your local PC.</li>
+<li>Interactive WebApp that supports upload of images upto 200 MB for processing.</li>
+<li>We don’t want to brag, but our model achieves over 99.3% accuracy and can identify  <em>tricks</em>  like - “Hand Covering Face”, “Imperfect Mask” and “Towels covering face”.</li>
+</ul>
+<p>You can also:</p>
+<ul>
+<li>Use this as an API!</li>
+<li>Use your webcam and/or an external camera for mask detection using our Command Line Arguements.</li>
+</ul>
+<h1 id="tech">Tech</h1>
+<p>Our RT-FMD uses a number of open source projects and libraries to work properly:</p>
+<ul>
+<li>Tensorflow - For training our DL Model.</li>
+<li>Keras - For helping us evaluate our DL Model</li>
+<li>Open CV - For Face Recognition and all our computer vision needs.</li>
+<li>Caffe - A deep learning framework made with expression, speed, and modularity in mind. Used for Face Detection.</li>
+<li>Mobile Net V2 - Pretrained DL Model</li>
+<li>Streamlit - Open Source Project that helps us serve our models as a web app.</li>
+</ul>
+<h1 id="how-does-it-work">How Does it Work?</h1>
+<h2 id="dataset">Dataset</h2>
+<ul>
+<li>We use a dataset that consists of <strong>3835 images</strong> belonging to two classes:
+<ul>
+<li><strong>with_mask: 1916 images</strong></li>
+<li><strong>without_mask: 1919 images</strong></li>
+</ul>
+</li>
+<li>Link to dataset - <a href="https://drive.google.com/drive/folders/1XDte2DL2Mf_hw4NsmGst7QtYoU7sMBVG">Download</a></li>
+<li>We also added few images of our own to cover corner cases like:
+<ul>
+<li>Using Towel as a mask (Classifies as No mask)</li>
+<li>Using hand to cover face (Classified as No mask)</li>
+<li>Wearing mask around neck (Classified as No mask)</li>
+</ul>
+</li>
+</ul>
+<p><img src="https://www.pyimagesearch.com/wp-content/uploads/2020/04/face_mask_detection_phases.png" alt=""></p>
+<h2 id="training">Training</h2>
+<p><strong>Step 1:</strong> Prepare Data and Augment Data - First we start by augmenting data to increase training data size using the following methods:</p>
+<ul>
+<li>Horizontal Flip</li>
+<li>Zoom</li>
+<li>Width and Height Shift Range</li>
+</ul>
+<p><strong>Step2:</strong> Use <a href="https://towardsdatascience.com/review-mobilenetv2-light-weight-model-image-classification-8febb490e61c">Mobile Net V2</a> as our base model for classification. This particular model was chosen because:</p>
+<ul>
+<li>MobileNetV2 models are faster for the same accuracy across the entire latency spectrum. In particular, the new models use 2x fewer operations, need 30% fewer parameters and are about 30-40% faster.</li>
+<li>MobileNetV2 is a very effective feature extractor for object detection and segmentation.</li>
+<li>Computationally efficient and thus making it easier to deploy the model to embedded systems (Raspberry Pi, Google Coral, etc.).</li>
+<li>This system can therefore be used in real-time applications which require face-mask detection for safety purposes due to the outbreak of Covid-19. This project can be integrated with embedded systems for application in airports, railway stations, offices, schools, and public places to ensure that public safety guidelines are followed.</li>
+</ul>
+<p><img src="https://miro.medium.com/max/1176/1*bqE59FvgpvoAQUMQ0WEoUA.png" alt="Image for post"></p>
+<p><strong>Step 3:</strong> Evaluate Performance and save model to disk. Our model performs very well on real life data. Below are the results:</p>
+<p><img src="https://github.com/chandrikadeb7/Face-Mask-Detection/raw/master/plot.png" alt=""></p>
+<h2 id="computer-vision">Computer Vision</h2>
+<p>We the focus on utilising OpenCV and Cafee to make our app ready to use. The following are the highlights for the same:</p>
+<ul>
+<li>
+<p>We use OpenCV for ROI Detection (Region of Interests) which are identified as:</p>
+<ul>
+<li>Eyes</li>
+<li>Eyebrows</li>
+<li>Nose</li>
+<li>Mouth</li>
+<li>Jawline<br>
+<img src="https://www.pyimagesearch.com/wp-content/uploads/2020/04/face_mask_detection_facial_landmarks.png" alt=""></li>
+</ul>
+</li>
+<li>
+<p>We then apply the model to detect whether mask is present or not.</p>
+</li>
+<li>
+<p>For Webcam, we do the same process at 34 FPS.</p>
+</li>
+</ul>
+<h1 id="installation">Installation</h1>
+<p>We have tried to keep the installation process as simple as possible. Please keep note of the following points:</p>
+<ul>
+<li>Please follow the exact steps.The App is tested and verified only if each step is followed.</li>
+<li>First time deployment of app might take 1 -2 minutes.</li>
+<li>Note that all commands are to be entered with Admin Permissions in the command line.</li>
+</ul>
+<p>Step 1 - Clone the Repository.</p>
+<pre class=" language-sh"><code class="prism  language-sh">$ git clone https://github.com/Prabhav55221/ILLUMINATI-MaskDetection.git
+$ cd ILLUMINATI-MaskDetection
+</code></pre>
+<p>Step 2 - Create Virtual Env and Download Reqs.</p>
+<pre class=" language-sh"><code class="prism  language-sh">$ mkvirtualenv tester
+$ pip3 install -r requirements.txt
+OR
+$ mkvirtualenv tester
+$ pip install -r requirements.txt
+</code></pre>
+<p>And that’s it! You are done. Let’s now get this working.</p>
+<h1 id="usage">Usage</h1>
+<h2 id="web-application-mode">Web Application Mode</h2>
+<p>Step 1: CD into the folder<br>
+Step 2: Run the server and enjoy!</p>
+<p><strong>Note that the Website does not support Webcam mode due to deployment issues.</strong></p>
+<pre class=" language-sh"><code class="prism  language-sh">$ cd ILLUMINATI-MaskDetection
+$ streamlit run app.py
+</code></pre>
+<h2 id="api-mode---for-all-you-devs-out-there">API Mode - For all you devs out there</h2>
+<p>Step 1: CD into the folder<br>
+Step 2: Now you can use both <strong>PHOTO</strong> and <strong>WEBCAM MODE</strong> by entering the following code</p>
+<blockquote>
+<p>Image Mode (Pass any image using the --image flag.)</p>
+</blockquote>
+<pre class=" language-sh"><code class="prism  language-sh">$ python3 detect_mask_image.py --image images/pic1.jpeg
+OR
+$ python detect_mask_image.py --image images/pic1.jpeg
+</code></pre>
+<blockquote>
+<p>Webcam Mode</p>
+</blockquote>
+<pre class=" language-sh"><code class="prism  language-sh">$ python3 detect_mask_video.py 
+OR
+$ python3 detect_mask_video.py 
+</code></pre>
+<h1 id="thats-it-">That’s it !</h1>
+<p>Team Illuminati<br>
+NSUT, Delhi</p>
+
+    </div>
+  </div>
+</body>
+
+</html>

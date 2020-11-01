@@ -1,0 +1,127 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Glove-Recognition.html</title>
+  <link rel="stylesheet" href="https://stackedit.io/style.css" />
+</head>
+
+<body class="stackedit">
+  <div class="stackedit__left">
+    <div class="stackedit__toc">
+      
+<ul>
+<li><a href="#team-illuminati---glove-detection">Team ILLUMINATI - Glove Detection</a></li>
+<li><a href="#features">Features</a></li>
+<li><a href="#tech">Tech</a></li>
+<li><a href="#how-does-it-work">How Does it Work?</a>
+<ul>
+<li><a href="#dataset">Dataset</a></li>
+<li><a href="#training">Training</a></li>
+</ul>
+</li>
+<li><a href="#installation">Installation</a></li>
+<li><a href="#usage">Usage</a></li>
+<li><a href="#that’s-it-">That’s it !</a></li>
+</ul>
+
+    </div>
+  </div>
+  <div class="stackedit__right">
+    <div class="stackedit__html">
+      <h1 id="team-illuminati---glove-detection">Team ILLUMINATI - Glove Detection</h1>
+<p><a href="https://travis-ci.org/joemccann/dillinger"><img src="https://travis-ci.org/joemccann/dillinger.svg?branch=master" alt="Build Status"></a></p>
+<p>For our complete submisisson, headover to - <a href="https://github.com/swatig23/myntra_ILLUMINATI">Illuminati</a><br>
+This is the second component of our project - <a href="https://github.com/Ridam2k/ILLUMINATI-Glove-Recognition"><strong>Real Time Glove Detection</strong></a></p>
+<p>Before going further please see the demo - <strong><strong>Insert Video</strong></strong></p>
+<h1 id="features">Features</h1>
+<ul>
+<li>Easy 5 step setup on your local PC.</li>
+<li>No external peripherals required, your in-built webcam is all it needs!</li>
+<li>Can be easily accessed through our interactive website</li>
+<li>Boasts of an accuracy of 90-93% and identifies gloves of varying colors and shapes</li>
+</ul>
+<p>You can also:</p>
+<ul>
+<li>Use this as an API and integrate with various other projects</li>
+</ul>
+<h1 id="tech">Tech</h1>
+<p>Our RT-Glove Detection uses a number of open source projects and libraries to work properly:</p>
+<ul>
+<li>Tensorflow - For training our DL Model.</li>
+<li>Keras - For helping us evaluate our DL Model</li>
+<li>Open CV - For Hand Recognition and all our computer vision needs.</li>
+<li>Caffe - A deep learning framework made with expression, speed, and modularity in mind. Also used for Hand Detection.</li>
+<li>Streamlit - Open Source Project that helps us serve our models as a web app.</li>
+</ul>
+<h1 id="how-does-it-work">How Does it Work?</h1>
+<h2 id="dataset">Dataset</h2>
+<ul>
+<li>We use a dataset that consists of <strong>1135 images</strong> belonging to two classes:
+<ul>
+<li><strong>yesreal: 635 images</strong></li>
+<li><strong>noreal: 500 images</strong></li>
+</ul>
+</li>
+<li>Link to dataset - <a href="https://www.kaggle.com/adityagupta008/medical-gloves-recognition-dataset">Download</a></li>
+</ul>
+<h2 id="training">Training</h2>
+<p><strong>Step 1:</strong> Prepare Data and Augment Data - First we start by augmenting data to increase training data size using the following methods:</p>
+<ul>
+<li>Horizontal Flip</li>
+<li>Zoom</li>
+<li>Width and Height Shift Range</li>
+</ul>
+<p><strong>Step2:</strong> The overall model developed is quite light-weight as it uses a fairly simple CNN architecture for classifying the real-time detected image into “Glove” and “No Glove”. For the purpose of detecting the hand from an image, pre-trained Haar Feature-based Cascade Classifier is used. This particular classifier is selected because:</p>
+<ul>
+<li>It is an effective object detection method with pre-trained methods easily accessible on it’s <a href="https://github.com/opencv/opencv/tree/master/data">GitHub</a> repository.</li>
+<li>It is specially focused on detecting human body parts from images and is thus quite reliable.</li>
+<li>It is one of the fewest algorithms to run in real-time. The key to its high performance is the use of integral image, which only performs basic operations in a very low processing time.</li>
+<li>The propsed model can therefore be used in real-time applications which require glove-mask detection for safety purposes due to the outbreak of Covid-19. This project can be integrated with embedded systems for application in airports, railway stations, offices, schools, and public places to ensure that public safety guidelines are followed.</li>
+</ul>
+<p><strong>The CNN Network architecture</strong><br>
+<img src="https://raw.githubusercontent.com/mk-gurucharan/Face-Mask-Detection/master/cnn_facemask.png" alt=""></p>
+<p><strong>Step 3:</strong> Evaluate Performance and save model to disk. Our model performs very well on real life data. Below is an example:</p>
+<h1 id="installation">Installation</h1>
+<p>We have tried to keep the installation process as simple as possible. Please keep note of the following points:</p>
+<ul>
+<li>Please follow the exact steps.The App is tested and verified only if each step is followed.</li>
+<li>First time deployment of app might take 1 -2 minutes.</li>
+<li>Note that all commands are to be entered with Admin Permissions in the command line.</li>
+</ul>
+<p>Step 1 - Clone the Repository.</p>
+<pre class=" language-sh"><code class="prism  language-sh">$ git clone https://github.com/Ridam2k/ILLUMINATI-Glove-Recognition
+$ cd ILLUMINATI-Glove-Recognition
+
+</code></pre>
+<p>Step 2 - Create Virtual Env and Download Reqs.</p>
+<pre class=" language-sh"><code class="prism  language-sh">$ mkvirtualenv tester (optional)
+$ pip3 install -r requirements.txt
+OR
+$ mkvirtualenv tester (optional)
+$ pip install -r requirements.txt
+
+</code></pre>
+<p>And that’s it! You are done. Let’s now get this working.</p>
+<h1 id="usage">Usage</h1>
+<p>Step 1: CD into the folder<br>
+Step 2: Enter the following code</p>
+<blockquote>
+<p>Webcam Mode</p>
+</blockquote>
+<pre class=" language-sh"><code class="prism  language-sh">$ python glove_detection.py 
+OR
+$ python3 glove_detection .py 
+
+</code></pre>
+<h1 id="that’s-it-">That’s it !</h1>
+<p>Team Illuminati<br>
+NSUT, Delhi</p>
+
+    </div>
+  </div>
+</body>
+
+</html>
